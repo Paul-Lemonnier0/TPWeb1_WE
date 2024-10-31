@@ -1,19 +1,19 @@
 class Forme {
-    constructor(color, thickness) {
+    constructor(color, thickness, id) {
         this.color = color;
         this.thickness = thickness;
+        this.id = id;
     }
 
     paint(ctx) {
         ctx.lineWidth = this.thickness;
-        ctx.strokeStyle = this.color;
-        console.log("Painting shape");
+        ctx.strokeStyle = "red";
     }
 }
 
 class Rectangle extends Forme {
-    constructor(topLeftX, topLeftY, width, height, thickness, color) {
-        super(color, thickness);
+    constructor(topLeftX, topLeftY, width, height, thickness, color, id) {
+        super(color, thickness, id);
         this.topLeftX = topLeftX;
         this.topLeftY = topLeftY;
         this.width = width;
@@ -39,14 +39,14 @@ class Rectangle extends Forme {
     paint(ctx) {
         super.paint(ctx);
         ctx.beginPath();
-        ctx.rect(this.getInitX(), this.getInitY(), this.width, this.height);
+        ctx.strokeRect(this.getInitX(), this.getInitY(), this.width, this.height);
         ctx.stroke();
     }
 }
 
 class Line extends Forme {
-    constructor(startX, startY, endX, endY, thickness, color) {
-        super(color, thickness);
+    constructor(startX, startY, endX, endY, thickness, color, id) {
+        super(color, thickness, id);
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
@@ -80,19 +80,16 @@ class Line extends Forme {
 
 class Drawing {
     constructor(formes) {
-        this.formes = new Array();
-    }
+        this.formes = formes || new Array();
 
-    paint(ctx) {
-        ctx.fillStyle = '#F0F0F0'; 
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-        this.formes.forEach((forme) => {
-            forme.paint(ctx);
-        });
     }
 
     addForme(forme) {
         this.formes.push(forme)
+    }
+
+    removeForme(formeID, ctx) {
+        this.formes = this.formes.filter(f => f.id !== formeID)
+        this.paint(ctx)
     }
 }
